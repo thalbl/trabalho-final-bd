@@ -1,6 +1,6 @@
 # 📚 Explorador de Dados de Livros
 
-Sistema web para análise e visualização de dados de livros, autores e leitores desenvolvido em Flask com MySQL.
+Sistema web para análise e visualização de dados de livros, autores e leitores desenvolvido em Flask com MySQL. Todos os dados foram pegos do [GoodReadsDataset](https://cseweb.ucsd.edu/~jmcauley/datasets/goodreads.html)
 
 ## ✨ Funcionalidades Implementadas
 
