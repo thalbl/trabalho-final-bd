@@ -130,29 +130,6 @@ python teste_funcionalidades.py
 - Botões com estados hover e active
 - Layout em grid responsivo
 
-## 📁 Estrutura do Projeto
-
-```
-FinalProject_DB/
-├── app.py                          # Aplicação principal Flask
-├── requirements.txt                # Dependências Python
-├── otimizar_banco.sql             # Script de otimização do banco
-├── teste_funcionalidades.py       # Script de testes
-├── OTIMIZACOES_PERFORMANCE.md     # Documentação de otimizações
-├── README.md                      # Este arquivo
-├── static/
-│   └── css/
-│       └── style.css              # Estilos CSS
-└── templates/
-    ├── index.html                 # Página inicial
-    ├── autores.html               # Página de autores
-    ├── generos.html               # Página de gêneros
-    ├── livros_sem_interacao.html  # Livros sem interação
-    ├── usuarios_max_nota.html     # Usuários com nota máxima
-    ├── media_livros_autor.html    # Média de livros por autor
-    └── detalhes_livro.html        # Detalhes de livro individual
-```
-
 ## 🔧 Rotas da Aplicação
 
 | Rota | Descrição | Parâmetros |
@@ -197,4 +174,3 @@ Desenvolvido como projeto acadêmico para análise de dados de livros e leitores
 - Links clicáveis entre páginas
 - Design responsivo e moderno
 - Otimizações de performance 
->>>>>>> a1d5c036457cef819394ce9d1a3fbc16cb29b977
