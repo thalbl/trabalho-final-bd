@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ autor.nome }} - Explorador de Dados de Livros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}" class="header-title">📚 Explorador de Dados de Livros</a></h1>
+            <p>Análises e visualizações sobre autores, livros e leitores</p>
+            
+            <!-- Campo de busca -->
+            <div class="search-container">
+                <form action="/buscar" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Buscar livros por título..." 
+                            class="search-input"
+                            value="{{ request.args.get('q', '') }}"
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="search-button">
+                            🔍 Buscar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="author-details">
+            <div class="author-header">
+                <div class="author-info">
+                    <h1>👤 {{ autor.nome }}</h1>
+                    <div class="author-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ total_livros }}</span>
+                            <span class="stat-label">Livros</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ "%.2f"|format(media_notas) if media_notas else "N/A" }}</span>
+                            <span class="stat-label">Média de Notas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">{{ total_avaliacoes }}</span>
+                            <span class="stat-label">Avaliações</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if livros %}
+            <div class="author-books">
+                <h2>📚 Livros do Autor</h2>
+                <div class="books-grid">
+                    {% for livro in livros %}
+                    <div class="book-card">
+                        <div class="book-image">
+                            {% if livro.capa %}
+                                <img src="{{ livro.capa }}" alt="Capa do livro {{ livro.titulo }}" onerror="this.src='{{ url_for('static', filename='img/default-book.svg') }}'">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='img/default-book.svg') }}" alt="Capa padrão">
+                            {% endif %}
+                        </div>
+                        <div class="book-info">
+                            <h3 class="book-title">
+                                <a href="{{ url_for('detalhes_livro', livro_id=livro.id) }}">{{ livro.titulo }}</a>
+                            </h3>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if generos %}
+            <div class="author-genres">
+                <h2>🎭 Gêneros Mais Frequentes</h2>
+                <div class="genres-list">
+                    {% for genero in generos %}
+                    <div class="genre-item">
+                        <span class="genre-name">{{ genero.nome }}</span>
+                        <span class="genre-count">{{ genero.total_livros }} livros</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="back-link">
+                <a href="{{ url_for('index') }}" class="btn-back">← Voltar ao Início</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Trabalho Final - Banco de Dados | &copy; 2023</p>
+        </div>
+    </footer>
+</body>
+</html> 

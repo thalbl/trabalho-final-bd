@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Média de Livros por Autor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}" class="header-title">📚 Explorador de Dados de Livros</a></h1>
+            <p>Análises e visualizações sobre autores, livros e leitores</p>
+            <nav>
+                <a href="/">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="stat-box">
+            <h2>Média Geral</h2>
+            <div class="stat-value">{{ media_geral | round(2) }} livros por autor</div>
+            <p>Esta é a média de livros escritos por autor em nosso banco de dados</p>
+        </div>
+
+        <div class="chart-container">
+            <h2>Distribuição de Livros por Autor</h2>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Distribuição de Livros por Autor">
+            <p class="chart-description">O histograma mostra como os livros estão distribuídos entre os autores. A linha vermelha indica a média geral.</p>
+        </div>
+
+        <div class="data-table">
+            <h2>Distribuição Completa</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Autor</th>
+                        <th>Total de Livros</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in distribuicao %}
+                    <tr>
+                        <td>{{ item['autor'] }}</td>
+                        <td>{{ item['total_livros'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Trabalho Final - Banco de Dados | &copy; 2023</p>
+        </div>
+    </footer>
+</body>
+</html>
