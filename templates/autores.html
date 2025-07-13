@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autores e Livros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}" class="header-title">📚 Explorador de Dados de Livros</a></h1>
+            <p>Análises e visualizações sobre autores, livros e leitores</p>
+            <nav>
+                <a href="/">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="chart-container">
+            <h2>Distribuição de Livros por Autor (Top 20)</h2>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Distribuição de Livros por Autor">
+        </div>
+
+        <div class="data-table">
+            <h2>Autores com Mais Livros</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Autor</th>
+                        <th>Quantidade de Livros</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for autor in autores_count %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <a href="{{ url_for('detalhes_autor', autor_id=autor.id_autor) }}" class="author-link">
+                                {{ autor.nome_autor }}
+                            </a>
+                        </td>
+                        <td>{{ autor.total_livros }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="data-table">
+            <h2>Lista Completa de Autores e Livros</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Autor</th>
+                        <th>Livro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in autores_livros %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('detalhes_autor', autor_id=item.id_autor) }}" class="author-link">
+                                {{ item.nome_autor }}
+                            </a>
+                        </td>
+                        <td>{{ item.titulo_livro }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Trabalho Final - Banco de Dados | &copy; 2023</p>
+        </div>
+    </footer>
+</body>
+</html>

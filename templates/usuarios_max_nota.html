@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários com Nota Máxima</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #007bff;
+            background: white;
+            color: #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .filter-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+        
+        .filter-btn.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .livro-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .livro-link:hover {
+            text-decoration: underline;
+        }
+        
+        .livros-list {
+            max-height: 100px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .livro-text {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}" class="header-title">📚 Explorador de Dados de Livros</a></h1>
+            <p>Análises e visualizações sobre autores, livros e leitores</p>
+            <nav>
+                <a href="/">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="filter-buttons">
+            <a href="?limit=5" class="filter-btn {% if current_limit == 5 %}active{% endif %}">TOP 5</a>
+            <a href="?limit=10" class="filter-btn {% if current_limit == 10 %}active{% endif %}">TOP 10</a>
+            <a href="?limit=20" class="filter-btn {% if current_limit == 20 %}active{% endif %}">TOP 20</a>
+        </div>
+
+        {% if plot_url %}
+        <div class="chart-container">
+            <h2>Top {{ current_limit }} Usuários com Mais Notas Máximas</h2>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Top Usuários com Mais Notas Máximas">
+        </div>
+        {% endif %}
+
+        <div class="data-table">
+            <h2>Usuários que Deram Nota Máxima (5) a Livros</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID do Usuário</th>
+                        <th>Total de Notas Máximas</th>
+                        <th>Livros Avaliados</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario['usuario_id'] }}</td>
+                        <td>{{ usuario['total_max_notas'] }}</td>
+                        <td>
+                            <div class="livros-list">
+                                {% if usuario['livros_avaliados'] %}
+                                    {% set livros = usuario['livros_avaliados'].split('; ') %}
+                                    {% for livro in livros %}
+                                        {% if livro %}
+                                            {% set livro_parts = livro.split(':', 1) %}
+                                            {% if livro_parts|length == 2 and livro_parts[0].isdigit() %}
+                                                <a href="{{ url_for('detalhes_livro', livro_id=livro_parts[0]) }}" class="livro-link">
+                                                    {{ livro_parts[1] }}
+                                                </a><br>
+                                            {% else %}
+                                                <span class="livro-text">{{ livro }}</span><br>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="livro-text">Nenhum livro encontrado</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">Nenhum usuário encontrado com notas máximas</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Trabalho Final - Banco de Dados | &copy; 2023</p>
+        </div>
+    </footer>
+</body>
+</html>

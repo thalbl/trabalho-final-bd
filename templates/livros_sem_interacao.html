@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livros Sem Interação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}" class="header-title">📚 Explorador de Dados de Livros</a></h1>
+            <p>Análises e visualizações sobre autores, livros e leitores</p>
+            <nav>
+                <a href="/">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="info-box">
+            <p>Estes são livros que ainda não receberam nenhuma avaliação ou comentário de usuários. A nota média pode existir mesmo sem interações se foi calculada previamente.</p>
+        </div>
+
+        <div class="data-table">
+            <h2>Livros Sem Interação Registrada</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Editora</th>
+                        <th>Nota Média</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for livro in livros %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('detalhes_livro', livro_id=livro.id) }}" class="book-link">
+                                {{ livro.titulo }}
+                            </a>
+                        </td>
+                        <td>{{ livro.editora or 'N/A' }}</td>
+                        <td>
+                            {% if livro.nota_media %}
+                                {{ "%.2f"|format(livro.nota_media) }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">Todos os livros têm interações registradas!</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Trabalho Final - Banco de Dados | &copy; 2023</p>
+        </div>
+    </footer>
+</body>
+</html>

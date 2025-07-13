@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gêneros Populares</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}" class="header-title">📚 Explorador de Dados de Livros</a></h1>
+            <p>Análises e visualizações sobre autores, livros e leitores</p>
+            <nav>
+                <a href="/">Home</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="data-table">
+            <h2>Gêneros com Nota Média > 4.0 e Mais de 5 Livros</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Gênero</th>
+                        <th>Média de Notas</th>
+                        <th>Total de Livros</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for genero in generos %}
+                    <tr>
+                        <td>{{ genero['genero'] }}</td>
+                        <td>{{ genero['media_notas_genero'] | round(2) }}</td>
+                        <td>{{ genero['total_livros'] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">Nenhum gênero encontrado com os critérios especificados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Trabalho Final - Banco de Dados | &copy; 2023</p>
+        </div>
+    </footer>
+</body>
+</html>

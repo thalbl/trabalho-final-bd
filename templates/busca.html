@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Busca - Explorador de Dados de Livros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}" class="header-title">📚 Explorador de Dados de Livros</a></h1>
+            <p>Análises e visualizações sobre autores, livros e leitores</p>
+            
+            <!-- Campo de busca -->
+            <div class="search-container">
+                <form action="/buscar" method="GET" class="search-form" id="searchForm">
+                    <div class="search-input-group">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Buscar livros por título..." 
+                            class="search-input"
+                            value="{{ request.args.get('q', '') }}"
+                            autocomplete="off"
+                            id="searchInput"
+                        >
+                        <button type="submit" class="search-button" id="searchButton">
+                            <span class="button-text">🔍 Buscar</span>
+                            <span class="loading-spinner" style="display: none;">⏳</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="search-results">
+            <div class="search-header">
+                <h2>🔍 Resultados da Busca</h2>
+                {% if query %}
+                    <p>Buscando por título: <strong>"{{ query }}"</strong></p>
+                    <p>Encontrados <strong>{{ total_results }}</strong> livros</p>
+                {% endif %}
+            </div>
+
+            {% if livros %}
+                <div class="books-grid">
+                    {% for livro in livros %}
+                    <div class="book-card">
+                        <div class="book-image">
+                            {% if livro.capa %}
+                                <img src="{{ livro.capa }}" alt="Capa do livro {{ livro.titulo }}" onerror="this.src='{{ url_for('static', filename='img/default-book.svg') }}'">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='img/default-book.svg') }}" alt="Capa padrão">
+                            {% endif %}
+                        </div>
+                        <div class="book-info">
+                            <h3 class="book-title">
+                                <a href="{{ url_for('detalhes_livro', livro_id=livro.id) }}">{{ livro.titulo }}</a>
+                            </h3>
+                            <p class="book-author">
+                                {% if livro.autores %}
+                                    Por: <a href="{{ url_for('detalhes_autor', autor_id=livro.autor_id) }}">{{ livro.autores }}</a>
+                                {% else %}
+                                    <span class="no-author">Autor não informado</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Paginação -->
+                {% if total_pages > 1 %}
+                <div class="pagination">
+                    {% if page > 1 %}
+                        <a href="{{ url_for('buscar', q=query, page=page-1) }}" class="page-link">← Anterior</a>
+                    {% endif %}
+                    
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == page %}
+                            <span class="page-link active">{{ p }}</span>
+                        {% elif p <= 3 or p > total_pages - 3 or (p >= page - 1 and p <= page + 1) %}
+                            <a href="{{ url_for('buscar', q=query, page=p) }}" class="page-link">{{ p }}</a>
+                        {% elif p == 4 and page > 6 %}
+                            <span class="page-ellipsis">...</span>
+                        {% elif p == total_pages - 3 and page < total_pages - 5 %}
+                            <span class="page-ellipsis">...</span>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page < total_pages %}
+                        <a href="{{ url_for('buscar', q=query, page=page+1) }}" class="page-link">Próxima →</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="no-results">
+                    <div class="no-results-icon">📚</div>
+                    <h3>Nenhum livro encontrado</h3>
+                    <p>Tente buscar por outros termos ou verifique a ortografia.</p>
+                    <div class="search-suggestions">
+                        <h4>Sugestões:</h4>
+                        <ul>
+                            <li>Use termos mais gerais</li>
+                            <li>Verifique a ortografia</li>
+                            <li>Tente buscar por palavras-chave do título</li>
+                        </ul>
+                    </div>
+                    <a href="{{ url_for('index') }}" class="btn-back">← Voltar ao Início</a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Trabalho Final - Banco de Dados | &copy; 2023</p>
+        </div>
+    </footer>
+
+    <script>
+        // Indicador de carregamento durante a busca
+        document.getElementById('searchForm').addEventListener('submit', function() {
+            const button = document.getElementById('searchButton');
+            const buttonText = button.querySelector('.button-text');
+            const spinner = button.querySelector('.loading-spinner');
+            
+            buttonText.style.display = 'none';
+            spinner.style.display = 'inline';
+            button.disabled = true;
+        });
+        
+        // Auto-focus no campo de busca
+        document.getElementById('searchInput').focus();
+    </script>
+</body>
+</html> 
