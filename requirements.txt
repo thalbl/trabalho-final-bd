@@ -1,0 +1,14 @@
+Flask==2.3.3
+mysql-connector-python==8.1.0
+matplotlib==3.7.2
+seaborn==0.12.2
+numpy==1.24.3
+pandas==2.0.3
+requests==2.31.0
+
+# Dependências opcionais para otimizações avançadas
+# redis==4.6.0
+# celery==5.3.1
+# sqlalchemy==2.0.20
+# psutil==5.9.5
+# memory-profiler==0.61.0
